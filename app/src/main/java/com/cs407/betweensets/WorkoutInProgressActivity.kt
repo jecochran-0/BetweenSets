@@ -19,10 +19,10 @@ class WorkoutInProgressActivity : AppCompatActivity() {
         }
 
         // Button to navigate to the Workout Page (handled by a team member)
-        val workoutButton: Button = findViewById(R.id.button_workout)
-        workoutButton.setOnClickListener {
-            val intent = Intent(this, WorkoutActivity::class.java)
-            startActivity(intent)
-        }
+       // val workoutButton: Button = findViewById(R.id.button_workout)
+        //workoutButton.setOnClickListener {
+          //  val intent = Intent(this, WorkoutActivity::class.java)
+            //startActivity(intent)
+        //}
     }
 }
