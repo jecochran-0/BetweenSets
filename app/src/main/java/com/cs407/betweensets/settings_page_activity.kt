@@ -13,18 +13,14 @@ class settings_page_activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContentView(R.layout.activity_settings_page)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
     }
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.settings_menu, menu)
-        return true
-    }
+  //  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+  //      menuInflater.inflate(R.menu.settings_menu, menu)
+  //      return true
+  //  }
     fun callHome(v: View?) {
         startActivity(Intent(this@settings_page_activity, home_page_activity::class.java))
     }

@@ -7,5 +7,5 @@
         android:icon="@drawable/home_icon"
         android:onClick="callHome"
         android:title="Home"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>
