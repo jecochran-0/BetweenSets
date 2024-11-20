@@ -24,9 +24,9 @@ class home_page_activity : AppCompatActivity() {
     fun callSettings(v: View?) {
         startActivity(Intent(this@home_page_activity, settings_page_activity::class.java))
     }
-    fun callWorkoutSelect(v: View?) {
+    //fun callWorkoutSelect(v: View?) {
         //startActivity(Intent(this@home_page_activity, WorkoutSelectPage::class.java))
-    }
+    //}
     fun callNewExercise(v: View?) {
         startActivity(Intent(this@home_page_activity, NewExercise::class.java))
     }
