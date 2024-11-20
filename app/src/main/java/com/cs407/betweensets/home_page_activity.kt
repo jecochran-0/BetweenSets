@@ -20,18 +20,18 @@ class home_page_activity : AppCompatActivity() {
 
         setContentView(R.layout.activity_home_page)
 
-        val newExcerciseButton = findViewById<ImageButton>(R.id.new_excercise_button)
-        val workoutButton = findViewById<ImageButton>(R.id.workout_button)
-        val settingsButton = findViewById<ImageButton>(R.id.setting_button)
-        newExcerciseButton.setOnClickListener {
-            startActivity(Intent(this@home_page_activity, settings_page_activity::class.java))
-        }
-        workoutButton.setOnClickListener{
-            startActivity(Intent(this@home_page_activity, settings_page_activity::class.java))
-        }
     }
     fun callSettings(v: View?) {
         startActivity(Intent(this@home_page_activity, settings_page_activity::class.java))
+    }
+    fun callWorkoutSelect(v: View?) {
+        //startActivity(Intent(this@home_page_activity, WorkoutSelectPage::class.java))
+    }
+    fun callNewExercise(v: View?) {
+        startActivity(Intent(this@home_page_activity, NewExercise::class.java))
+    }
+    fun callLogout(v: View?) {
+        // startActivity(Intent(this@settings_page_activity, Login::class.java))
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.app_menu, menu)

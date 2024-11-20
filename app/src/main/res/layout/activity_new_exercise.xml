@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#283540"
+    tools:context=".NewExercise">
+
+    <EditText
+        android:id="@+id/username_textin5"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="28dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="# of Sets"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
+        app:layout_constraintEnd_toStartOf="@+id/username_textin4"
+        app:layout_constraintHorizontal_bias="0.63"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_textin3"
+        app:layout_constraintVertical_bias="0.639" />
+
+    <EditText
+        android:id="@+id/username_textin4"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="# of Reps"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_textin3"
+        app:layout_constraintVertical_bias="0.442" />
+
+    <EditText
+        android:id="@+id/username_textin3"
+        android:layout_width="284dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="23dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="Exercise Name"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="415dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="140dp"
+        android:background="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_exercise_back" />
+
+    <ImageView
+        android:id="@+id/new_exercise_back"
+        android:layout_width="75dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="362dp"
+        android:layout_marginBottom="5dp"
+        android:onClick="callHome"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="138dp"
+        android:text="New Exercise"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <Button
+        android:id="@+id/add_exercise_button"
+        android:layout_width="204dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="200dp"
+        android:onClick="callHome"
+        android:text="Add Exercise"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

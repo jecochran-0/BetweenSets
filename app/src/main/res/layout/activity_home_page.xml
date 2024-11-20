@@ -13,6 +13,7 @@
         android:layout_width="156dp"
         android:layout_height="145dp"
         android:layout_marginTop="108dp"
+        android:onClick="callNewExercise"
         android:src="@drawable/cs407_home1_edit"
         app:layout_constraintBottom_toTopOf="@+id/workout_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,6 +26,7 @@
         android:id="@+id/workout_button"
         android:layout_width="156dp"
         android:layout_height="145dp"
+        android:onClick="callWorkoutSelect"
         android:src="@drawable/cs407_home2_edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,23 +51,38 @@
     <Button
         android:id="@+id/Logout_ome_button"
         android:layout_width="102dp"
-        android:layout_height="42dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="231dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:text="Logout"
-        tools:layout_editor_absoluteX="289dp"
-        tools:layout_editor_absoluteY="10dp" />
+        app:layout_constraintBottom_toTopOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="42dp"
-        android:layout_height="38dp"
-        app:srcCompat="@drawable/baseline_home_24_white"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="14dp" />
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_home_24_white" />
+
     <View
+        android:id="@+id/view3"
         android:layout_width="415dp"
         android:layout_height="5dp"
+        android:layout_marginBottom="51dp"
         android:background="#FFFFFF"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="52dp" />
+        app:layout_constraintBottom_toTopOf="@+id/new_excercise_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Logout_ome_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

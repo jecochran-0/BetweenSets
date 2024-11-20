@@ -24,4 +24,7 @@ class settings_page_activity : AppCompatActivity() {
     fun callHome(v: View?) {
         startActivity(Intent(this@settings_page_activity, home_page_activity::class.java))
     }
+    fun callLogout(v: View?) {
+       // startActivity(Intent(this@settings_page_activity, Login::class.java))
+    }
 }

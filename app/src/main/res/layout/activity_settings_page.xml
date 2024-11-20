@@ -43,18 +43,16 @@
         android:id="@+id/password_textin"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginBottom="472dp"
+        android:layout_marginTop="224dp"
 
+        android:background="@color/white"
         android:ems="10"
+        android:hint="Enter Password"
         android:inputType="text"
-        android:text="test"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.86"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/username"
@@ -67,7 +65,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toStartOf="@+id/username_textin"
-        app:layout_constraintHorizontal_bias="0.193"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.142" />
@@ -77,10 +75,11 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="127dp"
+        android:background="@color/white"
         android:ems="10"
-        android:inputType="text"
+        android:hint="Enter Username"
 
-        android:text="test"
+        android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/password_textin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.855"
@@ -93,13 +92,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="51dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="481dp"
         android:text="Password:"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/password_textin"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,12 +110,10 @@
         android:text="Game Difficulty:"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/easy_button"
-        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
         android:id="@+id/easy_button"
@@ -140,6 +135,7 @@
         android:layout_width="159dp"
         android:layout_height="51dp"
         android:layout_marginTop="88dp"
+        android:onClick="callLogout"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,18 +145,29 @@
 
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="43dp"
-        android:layout_height="36dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="360dp"
+        android:layout_marginBottom="12dp"
         android:onClick="callHome"
-        app:srcCompat="@drawable/baseline_home_24_white"
-        tools:layout_editor_absoluteX="15dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_home_24_white" />
 
     <View
+        android:id="@+id/view2"
         android:layout_width="415dp"
         android:layout_height="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="58dp"
         android:background="#FFFFFF"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="52dp" />
+        app:layout_constraintBottom_toTopOf="@+id/username_textin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
