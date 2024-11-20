@@ -1,5 +1,6 @@
 package com.cs407.betweensets
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.MotionEvent
@@ -41,20 +42,14 @@ class GameActivity : AppCompatActivity() {
         // Set multiplier
         val multiplier = weight * reps
 
-        // Start the gamegit b
+        // Start the game
         startGame(multiplier)
 
         // Handle 'done' button click
         doneButton.setOnClickListener {
+            // Navigate back to WorkoutInProgressActivity
             finishGame()
         }
-    }
-
-    // Function to get the game duration (hardcoded for now)
-    private fun getGameDuration(): Long {
-        // Hardcoded game duration (e.g., 30 seconds)
-        // In the future, this can be modified to fetch the duration from the backend
-        return 30000L // Set to 30 seconds for now
     }
 
     private fun startGame(multiplier: Int) {
@@ -93,7 +88,12 @@ class GameActivity : AppCompatActivity() {
         gameEndTimer?.cancel()
 
         timerTextView.text = "Time's Up!"
-        // Any other end game logic, such as showing the final score or navigating to another screen
+        // Navigate back to WorkoutInProgressActivity
+        val intent = Intent(this, WorkoutInProgressActivity::class.java)
+        startActivity(intent)
+
+        // End the GameActivity
+        finish()
     }
 
     private fun launchFallingObjects(multiplier: Int) {
@@ -146,7 +146,7 @@ class GameActivity : AppCompatActivity() {
             }
         )
 
-        // Adjust sizes for each type, making apples much larger
+        // Adjust sizes for each type
         val size = when (type) {
             "apple" -> 250 // Larger size for apples
             "asteroid" -> Random.nextInt(150, 250) // Asteroids have a random size between 150 and 250
@@ -161,25 +161,12 @@ class GameActivity : AppCompatActivity() {
         // Add the ImageView to the layout
         gameLayout.addView(imageView)
 
-        // Set random horizontal starting position within the layout bounds with larger spacing
+        // Set random horizontal starting position within the layout bounds
         val maxWidth = gameLayout.width
-        var xPosition: Float
-        var attempts = 0
-        do {
-            xPosition = if (maxWidth > size) Random.nextInt(0, maxWidth - size).toFloat() else 0f
-            attempts++
-        } while (attempts < 10 && existingPositions.any { Math.abs(it.first - xPosition) < (it.second + size) * 1.5 }) // Increase minimum distance
-
-        // Add the x position to the list of existing positions to prevent overlap with future objects
-        existingPositions.add(Pair(xPosition, size))
+        val xPosition = if (maxWidth > size) Random.nextInt(0, maxWidth - size).toFloat() else 0f
 
         imageView.x = xPosition
         imageView.y = 0f // Start from the top
-
-        // Apply random rotation if it's an asteroid
-        if (type == "asteroid") {
-            imageView.rotation = Random.nextInt(-45, 45).toFloat() // Random angle between -45 and 45 degrees
-        }
 
         // Randomize falling duration to create asynchronous effect
         val fallDuration = Random.nextLong(3000, 6000) // Random duration between 3-6 seconds
@@ -188,12 +175,10 @@ class GameActivity : AppCompatActivity() {
             .setDuration(fallDuration) // Set randomized duration for the falling effect
             .withEndAction {
                 gameLayout.removeView(imageView) // Remove the object after it reaches the bottom
-                existingPositions.remove(Pair(xPosition, size)) // Remove position when the object is gone
             }
 
         return imageView
     }
-
 
     private fun handleObjectTap(view: ImageView, type: String, multiplier: Int) {
         when (type) {
@@ -203,5 +188,9 @@ class GameActivity : AppCompatActivity() {
         }
         scoreTextView.text = "Score: $score"
         findViewById<FrameLayout>(R.id.gameLayout).removeView(view) // Remove the tapped object
+    }
+
+    private fun getGameDuration(): Long {
+        return cooldownTime
     }
 }
