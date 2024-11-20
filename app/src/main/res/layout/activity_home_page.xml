@@ -46,4 +46,26 @@
         app:layout_constraintTop_toBottomOf="@+id/workout_button"
         app:layout_constraintVertical_bias="1.0" />
 
+    <Button
+        android:id="@+id/Logout_ome_button"
+        android:layout_width="102dp"
+        android:layout_height="42dp"
+        android:text="Logout"
+        tools:layout_editor_absoluteX="289dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="42dp"
+        android:layout_height="38dp"
+        app:srcCompat="@drawable/baseline_home_24_white"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="14dp" />
+    <View
+        android:layout_width="415dp"
+        android:layout_height="5dp"
+        android:background="#FFFFFF"
+        tools:layout_editor_absoluteX="-2dp"
+        tools:layout_editor_absoluteY="52dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
