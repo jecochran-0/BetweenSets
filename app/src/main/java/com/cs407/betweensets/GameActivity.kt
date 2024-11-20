@@ -41,7 +41,7 @@ class GameActivity : AppCompatActivity() {
         // Set multiplier
         val multiplier = weight * reps
 
-        // Start the game
+        // Start the gamegit b
         startGame(multiplier)
 
         // Handle 'done' button click
