@@ -135,6 +135,7 @@
         android:layout_width="159dp"
         android:layout_height="51dp"
         android:layout_marginTop="88dp"
+        android:backgroundTint="#7BA0B4"
         android:onClick="callLogout"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
