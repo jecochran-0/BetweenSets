@@ -31,7 +31,7 @@ class home_page_activity : AppCompatActivity() {
         startActivity(Intent(this@home_page_activity, NewExercise::class.java))
     }
     fun callLogout(v: View?) {
-        // startActivity(Intent(this@settings_page_activity, Login::class.java))
+         startActivity(Intent(this@home_page_activity, Login::class.java))
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.app_menu, menu)
