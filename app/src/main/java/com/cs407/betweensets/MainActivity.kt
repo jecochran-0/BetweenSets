@@ -20,5 +20,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
+
+        val intent = Intent(this, WorkoutSelectPage::class.java)
+        startActivity(intent)
     }
 }
