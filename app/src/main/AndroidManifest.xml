@@ -13,21 +13,24 @@
         android:theme="@style/Theme.BetweenSets"
         tools:targetApi="31">
         <activity
-            android:name=".NewExercise"
+            android:name=".SignUp"
             android:exported="false" />
         <activity
-            android:name=".settings_page_activity"
+            android:name=".Login"
             android:exported="false" />
-        <activity
-            android:name=".home_page_activity"
+        <activity android:name=".Welcome"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".GameActivity" />
+
+
         <activity android:name=".MainActivity" />
+
     </application>
 
 </manifest>
