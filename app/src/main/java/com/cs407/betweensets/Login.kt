@@ -15,11 +15,11 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         // Button to navigate to the Home Page
-        //val comlpeteLoginButton: Button = findViewById(R.id.completeLoginButton)
-        //completeLoginButton.setOnClickListener {
-            //val intent = Intent(this, Home::class.java)
-            //startActivity(intent)
-        //}
+        val completeLoginButton: Button = findViewById(R.id.completeLoginButton)
+        completeLoginButton.setOnClickListener {
+            val intent = Intent(this, home_page_activity::class.java)
+            startActivity(intent)
+        }
 
         val signupBack: ImageButton = findViewById(R.id.loginBack)
         signupBack.setOnClickListener {
