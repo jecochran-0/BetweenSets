@@ -1,29 +1,35 @@
 package com.cs407.betweensets
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.MotionEvent
-import android.view.ViewTreeObserver
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
+import kotlin.math.abs
 import kotlin.random.Random
 
 class GameActivity : AppCompatActivity() {
 
     private lateinit var timerTextView: TextView
     private lateinit var scoreTextView: TextView
-    private lateinit var doneButton: TextView
-    private var score: Int = 0
-    private var weight: Int = 1
-    private var reps: Int = 1
-    private var cooldownTime: Long = 30000L // Default cooldown (30 seconds)
+    private lateinit var levelTextView: TextView
+    private lateinit var feedbackTextView: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var doneButton: Button
+    private lateinit var tracerView: View
+    private lateinit var gameLayout: FrameLayout
 
-    private var objectGenerationInterval: Long = 2000L // Interval between each object generation (e.g., 1 second)
+    private var score: Int = 0
+    private var level: Int = 1
+    private var cooldownTime: Long = 30000L
+    private var gameStarted = false
     private var objectGenerationTimer: CountDownTimer? = null
     private var gameEndTimer: CountDownTimer? = null
+    private val activeObjects = mutableListOf<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,48 +38,69 @@ class GameActivity : AppCompatActivity() {
         // Initialize views
         timerTextView = findViewById(R.id.timerTextView)
         scoreTextView = findViewById(R.id.scoreTextView)
+        levelTextView = findViewById(R.id.levelTextView)
+        feedbackTextView = findViewById(R.id.feedbackTextView)
+        progressBar = findViewById(R.id.progressBar)
         doneButton = findViewById(R.id.doneButton)
+        gameLayout = findViewById(R.id.gameLayout)
 
-        // Get data from the previous screen
-        weight = intent.getIntExtra("weight", 1)
-        reps = intent.getIntExtra("reps", 1)
-        cooldownTime = intent.getLongExtra("cooldownTime", 30000L)
-
-        // Set multiplier
-        val multiplier = weight * reps
-
-        // Start the game
-        startGame(multiplier)
+        // Create a tracer view for the "cursor"
+        tracerView = View(this).apply {
+            layoutParams = FrameLayout.LayoutParams(80, 80)
+            background = getDrawable(R.drawable.tracer_circle) // Circular design
+            visibility = View.GONE // Initially hidden
+        }
+        gameLayout.addView(tracerView)
 
         // Handle 'done' button click
         doneButton.setOnClickListener {
-            // Navigate back to WorkoutInProgressActivity
             finishGame()
         }
+
+        // Show the initial prompt
+        feedbackTextView.text = "Press anywhere to start the game!"
     }
 
-    private fun startGame(multiplier: Int) {
-        val gameDuration = getGameDuration() // Retrieve game duration
-        startObjectGeneration(multiplier, gameDuration) // Start generating objects with the retrieved duration
-        startGameEndTimer(gameDuration) // Start the game duration timer
+    private fun startGame() {
+        if (gameStarted) return
+        gameStarted = true
+
+        feedbackTextView.text = ""
+        tracerView.visibility = View.VISIBLE
+        activeObjects.clear()
+
+        updateLevel(1)
+        progressBar.max = cooldownTime.toInt()
+        startObjectGeneration()
+        startGameEndTimer(cooldownTime)
     }
 
-    private fun startObjectGeneration(multiplier: Int, gameDuration: Long) {
-        objectGenerationTimer = object : CountDownTimer(gameDuration, objectGenerationInterval) {
+    private fun updateLevel(newLevel: Int) {
+        level = newLevel
+        levelTextView.text = "Level: $level"
+    }
+
+    private fun startObjectGeneration() {
+        objectGenerationTimer = object : CountDownTimer(cooldownTime, 100L) { // Small tick to introduce randomness
             override fun onTick(millisUntilFinished: Long) {
-                launchFallingObjects(multiplier)
+                if (Random.nextInt(100) < 20) { // 20% chance to spawn an object every 100ms
+                    launchFallingObjects()
+                }
+
+                if ((cooldownTime - millisUntilFinished) > 5000L * level) {
+                    updateLevel(level + 1)
+                }
             }
 
-            override fun onFinish() {
-                // Stop generating objects once the game duration is over
-            }
+            override fun onFinish() {}
         }.start()
     }
 
-    private fun startGameEndTimer(gameDuration: Long) {
-        gameEndTimer = object : CountDownTimer(gameDuration, 1000) {
+    private fun startGameEndTimer(duration: Long) {
+        gameEndTimer = object : CountDownTimer(duration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timerTextView.text = "Time: ${millisUntilFinished / 1000}"
+                progressBar.progress = (duration - millisUntilFinished).toInt()
             }
 
             override fun onFinish() {
@@ -83,114 +110,128 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun finishGame() {
-        // Stop all timers
         objectGenerationTimer?.cancel()
         gameEndTimer?.cancel()
-
-        timerTextView.text = "Time's Up!"
-        // Navigate back to WorkoutInProgressActivity
         val intent = Intent(this, WorkoutInProgressActivity::class.java)
+        intent.putExtra("finalScore", score)
         startActivity(intent)
-
-        // End the GameActivity
         finish()
     }
 
-    private fun launchFallingObjects(multiplier: Int) {
-        val gameLayout = findViewById<FrameLayout>(R.id.gameLayout)
-        val existingPositions = mutableListOf<Pair<Float, Int>>() // To prevent overlap
-
-        val globalLayoutListener = object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                for (i in 0 until 10) {
-                    val delay = Random.nextLong(0, 3000) // Random delay up to 3 seconds
-
-                    gameLayout.postDelayed({
-                        // Determine the object type based on weighted probability
-                        val objectType = getRandomObjectType()
-                        val imageView = createFallingObject(objectType, gameLayout, existingPositions)
-                        imageView.setOnTouchListener { _, event ->
-                            if (event.action == MotionEvent.ACTION_DOWN) {
-                                handleObjectTap(imageView, objectType, multiplier)
-                            }
-                            true
-                        }
-                    }, delay)
-                }
-                gameLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        }
-
-        gameLayout.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+    private fun launchFallingObjects() {
+        val type = getRandomObjectType()
+        val imageView = createFallingObject(type)
+        imageView.tag = type
+        activeObjects.add(imageView)
     }
 
     private fun getRandomObjectType(): String {
-        val randomValue = Random.nextInt(100) // Generates a random number between 0 and 99
+        val randomValue = Random.nextInt(100)
         return when {
-            randomValue < 60 -> "asteroid" // 60% chance
-            randomValue < 90 -> "apple"    // 30% chance (from 60 to 89)
-            else -> "orange"               // 10% chance (from 90 to 99)
+            randomValue < 60 -> "asteroid"
+            randomValue < 90 -> "apple"
+            else -> "orange"
         }
     }
 
-    private fun createFallingObject(type: String, gameLayout: FrameLayout, existingPositions: MutableList<Pair<Float, Int>>): ImageView {
+    private fun createFallingObject(type: String): ImageView {
         val imageView = ImageView(this)
-
-        // Set the image resource based on type
         imageView.setImageResource(
             when (type) {
                 "apple" -> R.drawable.apple
                 "orange" -> R.drawable.orange
                 "asteroid" -> R.drawable.asteroid
-                else -> R.drawable.default_image // Optional: fallback image
+                else -> R.drawable.default_image
             }
         )
 
-        // Adjust sizes for each type
         val size = when (type) {
-            "apple" -> 250 // Larger size for apples
-            "asteroid" -> Random.nextInt(150, 250) // Asteroids have a random size between 150 and 250
-            "orange" -> 150 // Fixed size for oranges
-            else -> 150 // Default size for any other type (if added in the future)
+            "apple" -> 200
+            "orange" -> 150
+            "asteroid" -> 250
+            else -> 150
         }
 
-        // Set layout parameters with the calculated size
         val params = FrameLayout.LayoutParams(size, size)
         imageView.layoutParams = params
-
-        // Add the ImageView to the layout
         gameLayout.addView(imageView)
 
-        // Set random horizontal starting position within the layout bounds
-        val maxWidth = gameLayout.width
-        val xPosition = if (maxWidth > size) Random.nextInt(0, maxWidth - size).toFloat() else 0f
+        val layoutWidth = gameLayout.width
+        val xPosition = if (layoutWidth > size) {
+            Random.nextInt(0, layoutWidth - size).toFloat()
+        } else {
+            (layoutWidth / 2).toFloat()
+        }
 
         imageView.x = xPosition
-        imageView.y = 0f // Start from the top
+        imageView.y = 0f
 
-        // Randomize falling duration to create asynchronous effect
-        val fallDuration = Random.nextLong(3000, 6000) // Random duration between 3-6 seconds
-        imageView.animate()
-            .translationY(gameLayout.height.toFloat()) // Animate to the bottom
-            .setDuration(fallDuration) // Set randomized duration for the falling effect
-            .withEndAction {
-                gameLayout.removeView(imageView) // Remove the object after it reaches the bottom
+        val fallDuration = Random.nextLong(800, 2000) // Randomize fall speed
+        ObjectAnimator.ofFloat(imageView, "translationY", gameLayout.height.toFloat()).apply {
+            duration = fallDuration
+            start()
+            doOnEnd {
+                gameLayout.removeView(imageView)
+                activeObjects.remove(imageView)
             }
-
+        }
         return imageView
     }
 
-    private fun handleObjectTap(view: ImageView, type: String, multiplier: Int) {
-        when (type) {
-            "apple" -> score += 1 * multiplier // User gains points for apples
-            "orange" -> score += 2 * multiplier // User gains more points for oranges
-            "asteroid" -> score -= 5 // User loses points for tapping asteroids
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val layoutPosition = IntArray(2)
+        gameLayout.getLocationOnScreen(layoutPosition)
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startGame() // Start the game on first press
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val relativeX = event.rawX - layoutPosition[0]
+                val relativeY = event.rawY - layoutPosition[1]
+
+                tracerView.x = relativeX - tracerView.width / 2
+                tracerView.y = relativeY - tracerView.height / 2
+
+                checkCollisions()
+            }
         }
-        scoreTextView.text = "Score: $score"
-        findViewById<FrameLayout>(R.id.gameLayout).removeView(view) // Remove the tapped object
+        return true
     }
 
-    private fun getGameDuration(): Long {
-        return cooldownTime
+    private fun checkCollisions() {
+        val iterator = activeObjects.iterator()
+        while (iterator.hasNext()) {
+            val obj = iterator.next()
+            if (isCollision(tracerView, obj)) {
+                val type = obj.tag as String
+                val parent = obj.parent as FrameLayout
+                when (type) {
+                    "apple" -> {
+                        score += 10
+                        feedbackTextView.text = "Nice! Apple touched!"
+                    }
+                    "orange" -> {
+                        score += 20
+                        feedbackTextView.text = "Great! Orange touched!"
+                    }
+                    "asteroid" -> {
+                        score -= 15
+                        feedbackTextView.text = "Ouch! Avoid asteroids!"
+                    }
+                }
+                parent.removeView(obj)
+                iterator.remove()
+                scoreTextView.text = "Score: $score"
+            }
+        }
+    }
+
+    private fun isCollision(view1: View, view2: View): Boolean {
+        val rect1 = android.graphics.Rect()
+        val rect2 = android.graphics.Rect()
+        view1.getHitRect(rect1)
+        view2.getHitRect(rect2)
+        return rect1.intersect(rect2)
     }
 }
