@@ -58,7 +58,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         // Show the initial prompt
-        feedbackTextView.text = "Press anywhere to start the game!"
+        feedbackTextView.text = "Press down to start the game, dont let go!"
     }
 
     private fun startGame() {
@@ -209,11 +209,11 @@ class GameActivity : AppCompatActivity() {
                 when (type) {
                     "apple" -> {
                         score += 10
-                        feedbackTextView.text = "Nice! Apple touched!"
+                        feedbackTextView.text = "Nice!"
                     }
                     "orange" -> {
                         score += 20
-                        feedbackTextView.text = "Great! Orange touched!"
+                        feedbackTextView.text = "Great!"
                     }
                     "asteroid" -> {
                         score -= 15
