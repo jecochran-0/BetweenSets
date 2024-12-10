@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1E2A38"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Workout Title -->
+        <TextView
+            android:id="@+id/tvWorkoutTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Push Day"
+            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#FFFFFF"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Exercise Name -->
+        <TextView
+            android:id="@+id/tvExerciseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bench Press"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Set 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#2A3B4C">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set 1"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="130 lb"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 reps"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="150 pts"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- Set 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#2A3B4C">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set 2"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="130 lb"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10 reps"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="120 pts"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!-- Set 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="#2A3B4C">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set 3"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="130 lb"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8 reps"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnFinish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Finish"
+                android:background="#7FFF00"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <!-- Next Exercise Button -->
+        <Button
+            android:id="@+id/btnNextExercise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Next Exercise ➡"
+            android:background="#7FFF00"
+            android:textColor="#000000"
+            android:padding="16dp" />
+    </LinearLayout>
+</ScrollView>

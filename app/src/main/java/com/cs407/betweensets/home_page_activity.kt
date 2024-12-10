@@ -20,18 +20,25 @@ class home_page_activity : AppCompatActivity() {
 
         setContentView(R.layout.activity_home_page)
 
+        val workoutButton: ImageButton = findViewById(R.id.workout_button)
+        workoutButton.setOnClickListener{
+            val intent = Intent(this, WorkoutInProgressActivity::class.java)
+            startActivity(intent)
+        }
+
     }
+
     fun callSettings(v: View?) {
         startActivity(Intent(this@home_page_activity, settings_page_activity::class.java))
     }
-    fun callWorkoutSelect(v: View?) {
+    //fun callWorkoutSelect(v: View?) {
         //startActivity(Intent(this@home_page_activity, WorkoutSelectPage::class.java))
-    }
+    //}
     fun callNewExercise(v: View?) {
         startActivity(Intent(this@home_page_activity, NewExercise::class.java))
     }
     fun callLogout(v: View?) {
-         startActivity(Intent(this@home_page_activity, Login::class.java))
+         startActivity(Intent(this@home_page_activity, Welcome::class.java))
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.app_menu, menu)
