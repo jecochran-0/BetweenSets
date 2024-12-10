@@ -59,11 +59,11 @@
         android:text="Logout"
         app:layout_constraintBottom_toTopOf="@+id/view3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/HomeButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/HomeButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="14dp"

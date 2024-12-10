@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,6 +24,12 @@ class home_page_activity : AppCompatActivity() {
         val workoutButton: ImageButton = findViewById(R.id.workout_button)
         workoutButton.setOnClickListener{
             val intent = Intent(this, WorkoutInProgressActivity::class.java)
+            startActivity(intent)
+        }
+
+        val HomeButton: ImageView = findViewById(R.id.HomeButton)
+        HomeButton.setOnClickListener{
+            val intent = Intent(this, Welcome::class.java)
             startActivity(intent)
         }
 
