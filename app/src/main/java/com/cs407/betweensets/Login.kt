@@ -37,7 +37,7 @@ class Login(private val injectedUserViewModel: UserViewModel? = null)
         userViewModel = if (injectedUserViewModel != null) {
             injectedUserViewModel
         } else {
-            ViewModelProvider(this)[UserViewModel::class.java]
+            (application as ViewModelExtend).userViewModel
         }
         noteDB = NoteDatabase.getDatabase(this)
 

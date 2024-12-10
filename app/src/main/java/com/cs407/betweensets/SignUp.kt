@@ -40,7 +40,7 @@ class SignUp(private val injectedUserViewModel: UserViewModel? = null // For tes
         userViewModel = if (injectedUserViewModel != null) {
             injectedUserViewModel
         } else {
-            ViewModelProvider(this)[UserViewModel::class.java]
+            (application as ViewModelExtend).userViewModel
         }
         noteDB = NoteDatabase.getDatabase(this)
 
