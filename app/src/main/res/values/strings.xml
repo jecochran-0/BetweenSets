@@ -9,4 +9,6 @@
     <string name="seated_row">Seated Row</string>
     <string name="add_workout">Add Workout</string>
     <string name="new_workout">New Workout</string>
+    <string name="note_database">noteDatabase</string>
+    <string name="userPasswdKV">com.cs407.betweensets.userPasswdKV</string>
 </resources>
