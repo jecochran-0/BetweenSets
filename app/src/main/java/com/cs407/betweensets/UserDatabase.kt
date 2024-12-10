@@ -19,6 +19,8 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.room.Update
 import androidx.room.Upsert
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.cs407.betweensets.R
 import java.util.Date
 
@@ -48,7 +50,8 @@ class Converters {
 data class Note(
     @PrimaryKey(autoGenerate = true) val noteId: Int = 0,
     val noteTitle: String,
-    val noteAbstract: String,
+    val noteSets: Int,
+    val noteReps: Int,
 
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT) val noteDetail: String?,
     val notePath: String?,
@@ -77,7 +80,8 @@ data class UserNoteRelation(
 data class NoteSummary(
     val noteId: Int,
     val noteTitle: String,
-    val noteAbstract: String,
+    val noteSets: Int,
+    val noteReps: Int,
     val lastEdited: Date
 )
 
@@ -127,11 +131,28 @@ interface NoteDao {
 
     @Transaction
     suspend fun upsertNote(note: Note, userId: Int) {
-        val rowId = upsert(note)
-        if (note.noteId == 0) {
-            val noteId = getByRowId(rowId)
-            insertRelation(UserNoteRelation(userId, noteId))
+//        val rowId = upsert(note)
+//        if (note.noteId == 0) {
+//            val noteId = getByRowId(rowId)
+//            insertRelation(UserNoteRelation(userId, noteId))
+//        }
+        val userExists = userNoteCount(userId) > 0
+        if (!userExists) {
+            throw IllegalStateException("User with userId $userId does not exist. Cannot upsert note.")
         }
+
+        // Perform the upsert operation
+        val rowId = upsert(note)
+
+        // Determine the actual noteId (new or existing)
+        val noteId = if (note.noteId == 0) {
+            getByRowId(rowId)
+        } else {
+            note.noteId
+        }
+
+        // Ensure the relation between the user and the note exists
+        insertRelation(UserNoteRelation(userId, noteId))
     }
 
     @Query(
@@ -167,7 +188,7 @@ interface DeleteDao {
     }
 }
 
-@Database(entities = [User::class, Note::class, UserNoteRelation::class], version = 1)
+@Database(entities = [User::class, Note::class, UserNoteRelation::class], version = 2)
 
 @TypeConverters(Converters::class)
 abstract class NoteDatabase : RoomDatabase() {
@@ -185,11 +206,41 @@ abstract class NoteDatabase : RoomDatabase() {
                     context.applicationContext,
                     NoteDatabase::class.java,
                     context.getString(R.string.note_database),
-                ).build()
+                )
+                    .addMigrations(MIGRATION_1_2)
+                    .build()
                 INSTANCE = instance
 
                 instance
             }
         }
+        // Migration from version 1 to 2
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+            CREATE TABLE Note_new (
+                noteId INTEGER PRIMARY KEY NOT NULL,
+                noteTitle TEXT NOT NULL,
+                noteSets INTEGER NOT NULL DEFAULT 0,
+                noteReps INTEGER NOT NULL DEFAULT 0,
+                noteDetail TEXT,
+                notePath TEXT,
+                lastEdited INTEGER NOT NULL
+            )
+        """.trimIndent())
+
+                // Copy data from the old table to the new table
+                database.execSQL("""
+            INSERT INTO Note_new (noteId, noteTitle, noteSets, noteReps, noteDetail, notePath, lastEdited)
+            SELECT noteId, noteTitle, 0 AS noteSets, 0 AS noteReps, noteDetail, notePath, lastEdited
+            FROM Note
+        """.trimIndent())
+
+                // Drop the old table and rename the new table
+                database.execSQL("DROP TABLE Note")
+                database.execSQL("ALTER TABLE Note_new RENAME TO Note")
+            }
+        }
     }
 }
+

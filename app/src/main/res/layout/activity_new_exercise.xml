@@ -9,7 +9,7 @@
     tools:context=".NewExercise">
 
     <EditText
-        android:id="@+id/username_textin5"
+        android:id="@+id/sets_text"
         android:layout_width="124dp"
         android:layout_height="50dp"
         android:layout_marginBottom="28dp"
@@ -18,14 +18,14 @@
         android:hint="  # of Sets"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
-        app:layout_constraintEnd_toStartOf="@+id/username_textin4"
+        app:layout_constraintEnd_toStartOf="@+id/reps_text"
         app:layout_constraintHorizontal_bias="0.63"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_textin3"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_text"
         app:layout_constraintVertical_bias="0.639" />
 
     <EditText
-        android:id="@+id/username_textin4"
+        android:id="@+id/reps_text"
         android:layout_width="124dp"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -36,11 +36,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.78"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_textin3"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_text"
         app:layout_constraintVertical_bias="0.442" />
 
     <EditText
-        android:id="@+id/username_textin3"
+        android:id="@+id/exercise_text"
         android:layout_width="284dp"
         android:layout_height="48dp"
         android:layout_marginTop="23dp"
