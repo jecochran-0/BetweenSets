@@ -1,6 +1,7 @@
 package com.cs407.betweensets
 
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -9,7 +10,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
-import kotlin.math.abs
 import kotlin.random.Random
 
 class GameActivity : AppCompatActivity() {
@@ -30,6 +30,7 @@ class GameActivity : AppCompatActivity() {
     private var objectGenerationTimer: CountDownTimer? = null
     private var gameEndTimer: CountDownTimer? = null
     private val activeObjects = mutableListOf<View>()
+    private var currentSet = 1 // Get current set from intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,21 +45,24 @@ class GameActivity : AppCompatActivity() {
         doneButton = findViewById(R.id.doneButton)
         gameLayout = findViewById(R.id.gameLayout)
 
+        // Get current set from intent
+        currentSet = intent.getIntExtra("currentSet", 1)
+
         // Create a tracer view for the "cursor"
         tracerView = View(this).apply {
             layoutParams = FrameLayout.LayoutParams(80, 80)
-            background = getDrawable(R.drawable.tracer_circle) // Circular design
+            background = getDrawable(R.drawable.tracer_circle)
             visibility = View.GONE // Initially hidden
         }
         gameLayout.addView(tracerView)
 
-        // Handle 'done' button click
+        // Handle 'Done' button click
         doneButton.setOnClickListener {
             finishGame()
         }
 
         // Show the initial prompt
-        feedbackTextView.text = "Press down to start the game, dont let go!"
+        feedbackTextView.text = "Press down to start the game. Don't let go!"
     }
 
     private fun startGame() {
@@ -81,9 +85,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun startObjectGeneration() {
-        objectGenerationTimer = object : CountDownTimer(cooldownTime, 100L) { // Small tick to introduce randomness
+        objectGenerationTimer = object : CountDownTimer(cooldownTime, 100L) {
             override fun onTick(millisUntilFinished: Long) {
-                if (Random.nextInt(100) < 20) { // 20% chance to spawn an object every 100ms
+                if (Random.nextInt(100) < 20) {
                     launchFallingObjects()
                 }
 
@@ -112,9 +116,12 @@ class GameActivity : AppCompatActivity() {
     private fun finishGame() {
         objectGenerationTimer?.cancel()
         gameEndTimer?.cancel()
-        val intent = Intent(this, WorkoutInProgressActivity::class.java)
-        intent.putExtra("finalScore", score)
-        startActivity(intent)
+
+        // Pass the final score back to WorkoutInProgressActivity
+        val resultIntent = Intent()
+        resultIntent.putExtra("finalScore", score)
+        resultIntent.putExtra("currentSet", currentSet)
+        setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 
@@ -166,7 +173,7 @@ class GameActivity : AppCompatActivity() {
         imageView.x = xPosition
         imageView.y = 0f
 
-        val fallDuration = Random.nextLong(800, 2000) // Randomize fall speed
+        val fallDuration = Random.nextLong(800, 2000)
         ObjectAnimator.ofFloat(imageView, "translationY", gameLayout.height.toFloat()).apply {
             duration = fallDuration
             start()
@@ -184,7 +191,7 @@ class GameActivity : AppCompatActivity() {
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                startGame() // Start the game on first press
+                startGame()
             }
             MotionEvent.ACTION_MOVE -> {
                 val relativeX = event.rawX - layoutPosition[0]
