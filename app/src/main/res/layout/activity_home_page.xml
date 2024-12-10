@@ -26,7 +26,6 @@
         android:id="@+id/workout_button"
         android:layout_width="156dp"
         android:layout_height="145dp"
-        android:onClick="callWorkoutSelect"
         android:src="@drawable/cs407_home2_edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

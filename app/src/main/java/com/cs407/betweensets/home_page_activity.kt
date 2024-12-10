@@ -20,7 +20,14 @@ class home_page_activity : AppCompatActivity() {
 
         setContentView(R.layout.activity_home_page)
 
+        val workoutButton: ImageButton = findViewById(R.id.workout_button)
+        workoutButton.setOnClickListener{
+            val intent = Intent(this, WorkoutInProgressActivity::class.java)
+            startActivity(intent)
+        }
+
     }
+
     fun callSettings(v: View?) {
         startActivity(Intent(this@home_page_activity, settings_page_activity::class.java))
     }
