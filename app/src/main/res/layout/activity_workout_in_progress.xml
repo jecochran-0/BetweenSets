@@ -69,12 +69,13 @@
                 android:textColor="#FFFFFF"
                 android:layout_weight="1" />
 
-            <TextView
+            <Button
+                android:id="@+id/btnSet1Finish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="150 pts"
-                android:textColor="#FFFFFF"
-                android:layout_weight="1" />
+                android:text="Finish"
+                android:background="#7FFF00"
+                android:textColor="#000000" />
         </LinearLayout>
 
         <!-- Set 2 -->
@@ -107,12 +108,14 @@
                 android:textColor="#FFFFFF"
                 android:layout_weight="1" />
 
-            <TextView
+            <Button
+                android:id="@+id/btnSet2Finish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="120 pts"
-                android:textColor="#FFFFFF"
-                android:layout_weight="1" />
+                android:text="Finish"
+                android:background="#7FFF00"
+                android:textColor="#000000"
+                android:enabled="false" />
         </LinearLayout>
 
         <!-- Set 3 -->
@@ -146,12 +149,13 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/btnFinish"
+                android:id="@+id/btnSet3Finish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Finish"
                 android:background="#7FFF00"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:enabled="false" />
         </LinearLayout>
 
         <!-- Next Exercise Button -->
@@ -165,3 +169,4 @@
             android:padding="16dp" />
     </LinearLayout>
 </ScrollView>
+

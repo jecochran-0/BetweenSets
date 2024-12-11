@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -39,7 +40,7 @@ class SignUp(private val injectedUserViewModel: UserViewModel? = null // For tes
         userViewModel = if (injectedUserViewModel != null) {
             injectedUserViewModel
         } else {
-            ViewModelProvider(this)[UserViewModel::class.java]
+            (application as ViewModelExtend).userViewModel
         }
         noteDB = NoteDatabase.getDatabase(this)
 
@@ -61,8 +62,22 @@ class SignUp(private val injectedUserViewModel: UserViewModel? = null // For tes
             val password = passwordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
 
-
-            if (username.isNotBlank() && password.isNotBlank() && password == confirmPassword) {
+            if(username.isEmpty()) {
+                Toast.makeText(applicationContext, "Username field is empty.", Toast.LENGTH_SHORT).show()
+            }
+            else if(userPasswdKV.contains(username)) {
+                Toast.makeText(applicationContext, "Username is already taken.", Toast.LENGTH_SHORT).show()
+            }
+            else if(password.isEmpty()) {
+                Toast.makeText(applicationContext, "Password field is empty.", Toast.LENGTH_SHORT).show()
+            }
+            else if(confirmPassword.isEmpty()) {
+                Toast.makeText(applicationContext, "Confirm Password Field is empty.", Toast.LENGTH_SHORT).show()
+            }
+            else if(password != confirmPassword) {
+                Toast.makeText(applicationContext, "Passwords do not match.", Toast.LENGTH_SHORT).show()
+            }
+            else {
                 lifecycleScope.launch {
                     val success = withContext(Dispatchers.IO) {
                         getUserPasswd(username, password)
@@ -81,8 +96,6 @@ class SignUp(private val injectedUserViewModel: UserViewModel? = null // For tes
                         //errorTextView.visibility = View.VISIBLE
                     }
                 }
-            } else {
-                //errorTextView.visibility = View.VISIBLE
             }
 
         }
@@ -116,3 +129,4 @@ private fun hash(input: String): String {
         .fold("") { str, it -> str + "%02x".format(it) }
 }
 }
+//Toast.makeText(applicationContext, "This is a toast message", Toast.LENGTH_SHORT).show()

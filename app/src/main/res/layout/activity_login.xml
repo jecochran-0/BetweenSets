@@ -37,7 +37,7 @@
             android:background="#FFFFFF"
             android:backgroundTint="#FFFFFF"
             android:ems="10"
-            android:hint="  E-Mail"
+            android:hint="  Username"
             android:inputType="textEmailAddress" />
 
         <EditText

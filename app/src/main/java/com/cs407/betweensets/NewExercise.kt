@@ -32,9 +32,9 @@ class NewExercise: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_exercise)
         saveButton = findViewById<Button>(R.id.add_exercise_button)
-        setEditText = findViewById(R.id.sets_text)
-        repsEditText = findViewById(R.id.reps_text)
-        titleEditText = findViewById(R.id.exercise_text)
+        setEditText = findViewById(R.id.newSets)
+        repsEditText = findViewById(R.id.newReps)
+        titleEditText = findViewById(R.id.newExercise)
         noteId = intent.getIntExtra("noteId", 0)
         noteDB = NoteDatabase.getDatabase(this)
         userViewModel = (application as ViewModelExtend).userViewModel
@@ -44,7 +44,7 @@ class NewExercise: AppCompatActivity() {
             }
         }
         if (noteId != 0) {
-            //loadNote()
+            loadNote()
         }
 
         // Set save button listener
@@ -52,16 +52,16 @@ class NewExercise: AppCompatActivity() {
             saveContent()
         }
     }
-//    private fun loadNote() {
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            val note = noteDB.noteDao().getById(noteId)
-//            withContext(Dispatchers.Main) {
-//                titleEditText.setText(note.noteTitle)
-//                setEditText.setText(note.noteSets)
-//                repsEditText.setText(note.noteReps)
-//            }
-//        }
-//    }
+        private fun loadNote() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val note = noteDB.noteDao().getById(noteId)
+            withContext(Dispatchers.Main) {
+                titleEditText.setText(note.noteTitle)
+                setEditText.setText(note.noteSets)
+                repsEditText.setText(note.noteReps)
+            }
+        }
+    }
     private fun saveContent() {
         val title = titleEditText.text.toString()
         val content = setEditText.text.toString()
@@ -93,4 +93,3 @@ class NewExercise: AppCompatActivity() {
         startActivity(Intent(this@NewExercise, home_page_activity::class.java))
     }
 }
-

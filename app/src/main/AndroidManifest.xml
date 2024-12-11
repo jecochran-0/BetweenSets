@@ -31,6 +31,8 @@
         <activity android:name=".home_page_activity" />
         <activity android:name=".settings_page_activity" />
         <activity android:name=".NewExercise" />
+        <activity android:name=".WorkoutSelectPage"/>
+        <activity android:name=".NewWorkout"/>
         <activity android:name=".WorkoutInProgressActivity"/>
 
 

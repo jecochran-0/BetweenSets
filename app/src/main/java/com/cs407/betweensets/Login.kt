@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,7 +23,6 @@ class Login(private val injectedUserViewModel: UserViewModel? = null)
     : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
-    private lateinit var confirmPasswordEditText: EditText
     private lateinit var userViewModel: UserViewModel
 
     private lateinit var userPasswdKV: SharedPreferences
@@ -37,7 +37,7 @@ class Login(private val injectedUserViewModel: UserViewModel? = null)
         userViewModel = if (injectedUserViewModel != null) {
             injectedUserViewModel
         } else {
-            ViewModelProvider(this)[UserViewModel::class.java]
+            (application as ViewModelExtend).userViewModel
         }
         noteDB = NoteDatabase.getDatabase(this)
 
@@ -57,7 +57,17 @@ class Login(private val injectedUserViewModel: UserViewModel? = null)
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
             //startActivity(intent)
-            if (username.isNotBlank() && password.isNotBlank()) {
+
+            if(username.isEmpty()) {
+                Toast.makeText(applicationContext, "Username field is empty.", Toast.LENGTH_SHORT).show()
+            }
+            else if(!userPasswdKV.contains(username)) {
+                Toast.makeText(applicationContext, "Username does not exist.", Toast.LENGTH_SHORT).show()
+            }
+            else if(password.isEmpty()) {
+                Toast.makeText(applicationContext, "Password field is empty.", Toast.LENGTH_SHORT).show()
+            }
+            else {
                 lifecycleScope.launch {
                     val success = withContext(Dispatchers.IO) {
                         getUserPasswd(username, password)
@@ -73,11 +83,9 @@ class Login(private val injectedUserViewModel: UserViewModel? = null)
                         //navigateToNoteListActivity()
                         startActivity(intent)
                     } else {
-                        //errorTextView.visibility = View.VISIBLE
+                        Toast.makeText(applicationContext, "Incorrect password.", Toast.LENGTH_SHORT).show()
                     }
                 }
-            } else {
-                //errorTextView.visibility = View.VISIBLE
             }
 
         }
