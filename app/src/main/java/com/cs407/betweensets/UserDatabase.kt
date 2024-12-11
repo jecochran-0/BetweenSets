@@ -3,40 +3,22 @@ package com.cs407.betweensets
 import android.content.Context
 import android.os.Parcelable
 import androidx.paging.PagingSource
-import androidx.room.ColumnInfo
-import androidx.room.Dao
-import androidx.room.Database
-import androidx.room.Delete
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import androidx.room.Insert
-import androidx.room.PrimaryKey
-import androidx.room.Query
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.Transaction
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
-import androidx.room.Update
-import androidx.room.Upsert
+import androidx.room.*
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.versionedparcelable.VersionedParcelize
-import com.cs407.betweensets.R
 import kotlinx.parcelize.Parcelize
 import java.util.Date
 
-// Define your own @Entity, @Dao and @Database
+// User entity
 @Entity(
-    indices = [Index(
-        value = ["userName"], unique = true
-    )]
+    indices = [Index(value = ["userName"], unique = true)]
 )
 data class User(
     @PrimaryKey(autoGenerate = true) val userId: Int = 0,
     val userName: String = ""
 )
+
+// Converters for Room database
 class Converters {
     @TypeConverter
     fun fromTimeStamp(value: Long): Date {
@@ -49,37 +31,50 @@ class Converters {
     }
 }
 
+// Note entity
 @Entity
 data class Note(
     @PrimaryKey(autoGenerate = true) val noteId: Int = 0,
     val noteTitle: String,
     val noteSets: Int,
     val noteReps: Int,
-
     @ColumnInfo(typeAffinity = ColumnInfo.TEXT) val noteDetail: String?,
     val notePath: String?,
     val lastEdited: Date
 )
 
+// Workout entity
+@Entity
+data class Workout(
+    @PrimaryKey(autoGenerate = true) val workoutId: Int = 0,
+    val workoutName: String,
+    @ColumnInfo(typeAffinity = ColumnInfo.TEXT) val exercises: String // Comma-separated exercise IDs
+)
+
+// User-Note relationship entity
 @Entity(
     primaryKeys = ["userId", "noteId"],
-    foreignKeys = [ForeignKey(
-        entity = User::class,
-        parentColumns = ["userId"],
-        childColumns = ["userId"],
-        onDelete = ForeignKey.CASCADE
-    ), ForeignKey(
-        entity = Note::class,
-        parentColumns = ["noteId"],
-        childColumns = ["noteId"],
-        onDelete = ForeignKey.CASCADE
-    )]
+    foreignKeys = [
+        ForeignKey(
+            entity = User::class,
+            parentColumns = ["userId"],
+            childColumns = ["userId"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Note::class,
+            parentColumns = ["noteId"],
+            childColumns = ["noteId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class UserNoteRelation(
     val userId: Int,
     val noteId: Int
 )
 
+// NoteSummary for returning simplified note information
 @Parcelize
 data class NoteSummary(
     val noteId: Int,
@@ -87,8 +82,9 @@ data class NoteSummary(
     val noteSets: Int,
     val noteReps: Int,
     val lastEdited: Date
-) :Parcelable
+) : Parcelable
 
+// User DAO
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user WHERE userName = :name")
@@ -97,6 +93,9 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE userId = :id")
     suspend fun getById(id: Int): User
 
+    @Query("SELECT * FROM note ORDER BY lastEdited DESC")
+    suspend fun getAllNotes(): List<Note>
+
     @Query(
         """SELECT * FROM User, Note, UserNoteRelation
             WHERE User.userId = :id
@@ -104,21 +103,22 @@ interface UserDao {
                 AND Note.noteId = UserNoteRelation.noteId
             ORDER BY Note.lastEdited DESC"""
     )
-    suspend fun getUsersWithNoteListsById(id: Int): List <NoteSummary>
+    suspend fun getUsersWithNoteListsById(id: Int): List<NoteSummary>
 
     @Query(
         """SELECT * FROM User, Note, UserNoteRelation
-            WHERE User.userId = :id 
+            WHERE User.userId = :id
                 AND UserNoteRelation.userId = User.userId
                 AND Note.noteId = UserNoteRelation.noteId
             ORDER BY Note.lastEdited DESC"""
     )
     fun getUsersWithNoteListsByIdPaged(id: Int): PagingSource<Int, NoteSummary>
 
-    @Insert(entity = User::class)
-    suspend fun insert(user:User)
+    @Insert
+    suspend fun insert(user: User)
 }
 
+// Note DAO
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM note WHERE noteId = :id")
@@ -127,7 +127,7 @@ interface NoteDao {
     @Query("SELECT noteId FROM note WHERE rowId = :rowId")
     suspend fun getByRowId(rowId: Long): Int
 
-    @Upsert(entity = Note::class)
+    @Upsert
     suspend fun upsert(note: Note): Long
 
     @Insert
@@ -151,6 +151,26 @@ interface NoteDao {
     suspend fun userNoteCount(userId: Int): Int
 }
 
+// Workout DAO
+@Dao
+interface WorkoutDao {
+    @Query("SELECT * FROM Workout")
+    suspend fun getAllWorkouts(): List<Workout>
+
+    @Insert
+    suspend fun insertWorkout(workout: Workout)
+
+    @Query("SELECT * FROM Workout WHERE workoutId = :id")
+    suspend fun getWorkoutById(id: Int): Workout
+
+    @Query(
+        """SELECT * FROM Note
+           WHERE noteId IN (:exerciseIds)"""
+    )
+    suspend fun getNotesByWorkout(exerciseIds: List<Int>): List<Note>
+}
+
+// Delete DAO
 @Dao
 interface DeleteDao {
     @Query("DELETE FROM user WHERE userId = :userId")
@@ -159,9 +179,8 @@ interface DeleteDao {
     @Query(
         """SELECT Note.noteId FROM User, Note, UserNoteRelation
                 WHERE User.userId = :userId
-                    AND UserNoteRelation.userId
-                    AND Note.noteId = UserNoteRelation.noteId
-        """
+                    AND UserNoteRelation.userId = User.userId
+                    AND Note.noteId = UserNoteRelation.noteId"""
     )
     suspend fun getAllNoteIdsByUser(userId: Int): List<Int>
 
@@ -175,12 +194,13 @@ interface DeleteDao {
     }
 }
 
-@Database(entities = [User::class, Note::class, UserNoteRelation::class], version = 2)
-
+// Database definition
+@Database(entities = [User::class, Note::class, UserNoteRelation::class, Workout::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class NoteDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noteDao(): NoteDao
+    abstract fun workoutDao(): WorkoutDao
     abstract fun deleteDao(): DeleteDao
 
     companion object {
@@ -192,42 +212,50 @@ abstract class NoteDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     NoteDatabase::class.java,
-                    context.getString(R.string.note_database),
+                    "note_database"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
                 INSTANCE = instance
-
                 instance
             }
         }
-        // Migration from version 1 to 2
+
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("""
-            CREATE TABLE Note_new (
-                noteId INTEGER PRIMARY KEY NOT NULL,
-                noteTitle TEXT NOT NULL,
-                noteSets INTEGER NOT NULL DEFAULT 0,
-                noteReps INTEGER NOT NULL DEFAULT 0,
-                noteDetail TEXT,
-                notePath TEXT,
-                lastEdited INTEGER NOT NULL
-            )
-        """.trimIndent())
+                    CREATE TABLE Note_new (
+                        noteId INTEGER PRIMARY KEY NOT NULL,
+                        noteTitle TEXT NOT NULL,
+                        noteSets INTEGER NOT NULL DEFAULT 0,
+                        noteReps INTEGER NOT NULL DEFAULT 0,
+                        noteDetail TEXT,
+                        notePath TEXT,
+                        lastEdited INTEGER NOT NULL
+                    )
+                """.trimIndent())
 
-                // Copy data from the old table to the new table
                 database.execSQL("""
-            INSERT INTO Note_new (noteId, noteTitle, noteSets, noteReps, noteDetail, notePath, lastEdited)
-            SELECT noteId, noteTitle, 0 AS noteSets, 0 AS noteReps, noteDetail, notePath, lastEdited
-            FROM Note
-        """.trimIndent())
+                    INSERT INTO Note_new (noteId, noteTitle, noteSets, noteReps, noteDetail, notePath, lastEdited)
+                    SELECT noteId, noteTitle, 0 AS noteSets, 0 AS noteReps, noteDetail, notePath, lastEdited
+                    FROM Note
+                """.trimIndent())
 
-                // Drop the old table and rename the new table
                 database.execSQL("DROP TABLE Note")
                 database.execSQL("ALTER TABLE Note_new RENAME TO Note")
             }
         }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE Workout (
+                        workoutId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        workoutName TEXT NOT NULL,
+                        exercises TEXT NOT NULL
+                    )
+                """.trimIndent())
+            }
+        }
     }
 }
-
