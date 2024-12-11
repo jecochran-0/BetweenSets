@@ -19,37 +19,27 @@ class WorkoutSelectPage : AppCompatActivity() {
 
         val selectedExercises: List<NoteSummary>? = intent.getParcelableArrayListExtra("SELECTED_EXERCISES")
 
-        val buttonContainer: Spinner = findViewById(R.id.buttonContainer)
+        val buttonContainer: LinearLayout? = findViewById(R.id.buttonContainer)
 
         // Check if there are selected exercises
+
         selectedExercises?.let {
-            // Loop through each exercise and create a button for it
             for (exercise in it) {
-                // Create a new button
-                val button = Button(this)
-                button.text = exercise.noteTitle // Set button text to exercise name
+                // Create a new button for each exercise
+                val exerciseButton = Button(this)
+                exerciseButton.text = exercise.noteTitle
 
-                // You can set a custom layout for the buttons
-                val layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                button.layoutParams = layoutParams
-
-                // Handle button click (e.g., navigate to the workout detail page)
-                button.setOnClickListener {
-                    // Do something with the clicked exercise
-                    // For example, log or navigate to another activity
-                    Toast.makeText(this, "Selected: ${exercise.noteTitle}", Toast.LENGTH_SHORT)
-                        .show()
-                    // You can pass more data or go to another activity if needed
+                // Set a listener for the button
+                exerciseButton.setOnClickListener {
+                    val intent = Intent(this, WorkoutInProgressActivity::class.java)
+                    intent.putExtra("EXERCISE_NAME", exercise.noteTitle)
+                    startActivity(intent)
                 }
 
                 // Add the button to the container
-                buttonContainer.addView(button)
+                buttonContainer?.addView(exerciseButton)
             }
         }
-
 
         val newWorkoutButton: Button = findViewById<Button>(R.id.newWorkoutButton)
         newWorkoutButton.setOnClickListener {

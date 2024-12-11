@@ -1,6 +1,7 @@
 package com.cs407.betweensets
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -44,6 +45,17 @@ class NewWorkout : AppCompatActivity() {
             }
         }
 
+        val backButton: ImageButton = findViewById(R.id.backButton)
+        backButton.setOnClickListener{
+            val intent = Intent(this, WorkoutSelectPage::class.java)
+            startActivity(intent)
+        }
+
+        val AddWorkoutButton: Button = findViewById(R.id.addWorkoutButton)
+        AddWorkoutButton.setOnClickListener{
+           callWorkoutPage()
+        }
+
     }
 
     private fun loadExercises() {
@@ -58,7 +70,7 @@ class NewWorkout : AppCompatActivity() {
         }
     }
 
-    fun callWorkoutPage(v: View?) {
+    fun callWorkoutPage() {
         val selectedExercises = exerciseAdapter.getSelectedExercises()
 
         val intent = Intent(this@NewWorkout, WorkoutSelectPage::class.java)
