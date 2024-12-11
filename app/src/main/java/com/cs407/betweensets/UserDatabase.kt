@@ -131,28 +131,11 @@ interface NoteDao {
 
     @Transaction
     suspend fun upsertNote(note: Note, userId: Int) {
-//        val rowId = upsert(note)
-//        if (note.noteId == 0) {
-//            val noteId = getByRowId(rowId)
-//            insertRelation(UserNoteRelation(userId, noteId))
-//        }
-        val userExists = userNoteCount(userId) > 0
-        if (!userExists) {
-            throw IllegalStateException("User with userId $userId does not exist. Cannot upsert note.")
-        }
-
-        // Perform the upsert operation
         val rowId = upsert(note)
-
-        // Determine the actual noteId (new or existing)
-        val noteId = if (note.noteId == 0) {
-            getByRowId(rowId)
-        } else {
-            note.noteId
+        if (note.noteId == 0) {
+            val noteId = getByRowId(rowId)
+            insertRelation(UserNoteRelation(userId, noteId))
         }
-
-        // Ensure the relation between the user and the note exists
-        insertRelation(UserNoteRelation(userId, noteId))
     }
 
     @Query(
