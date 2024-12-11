@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".ViewModelExtend"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -30,6 +31,8 @@
         <activity android:name=".home_page_activity" />
         <activity android:name=".settings_page_activity" />
         <activity android:name=".NewExercise" />
+        <activity android:name=".WorkoutSelectPage"/>
+        <activity android:name=".NewWorkout"/>
         <activity android:name=".WorkoutInProgressActivity"/>
 
 
