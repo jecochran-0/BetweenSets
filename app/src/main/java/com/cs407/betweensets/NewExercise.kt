@@ -44,7 +44,7 @@ class NewExercise: AppCompatActivity() {
             }
         }
         if (noteId != 0) {
-            //loadNote()
+            loadNote()
         }
 
         // Set save button listener
@@ -52,16 +52,16 @@ class NewExercise: AppCompatActivity() {
             saveContent()
         }
     }
-    //    private fun loadNote() {
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            val note = noteDB.noteDao().getById(noteId)
-//            withContext(Dispatchers.Main) {
-//                titleEditText.setText(note.noteTitle)
-//                setEditText.setText(note.noteSets)
-//                repsEditText.setText(note.noteReps)
-//            }
-//        }
-//    }
+        private fun loadNote() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val note = noteDB.noteDao().getById(noteId)
+            withContext(Dispatchers.Main) {
+                titleEditText.setText(note.noteTitle)
+                setEditText.setText(note.noteSets)
+                repsEditText.setText(note.noteReps)
+            }
+        }
+    }
     private fun saveContent() {
         val title = titleEditText.text.toString()
         val content = setEditText.text.toString()
