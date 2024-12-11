@@ -11,6 +11,16 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:background="#2A3B4C"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
         <!-- Workout Title -->
         <TextView
             android:id="@+id/tvWorkoutTitle"
@@ -49,13 +59,7 @@
             android:background="#2A3B4C">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set 1"
-                android:textColor="#FFFFFF"
-                android:layout_weight="1" />
-
-            <TextView
+                android:id="@+id/tvSet1Weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="130 lb"
@@ -63,6 +67,7 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/tvSet1Reps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12 reps"
@@ -88,13 +93,7 @@
             android:background="#2A3B4C">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set 2"
-                android:textColor="#FFFFFF"
-                android:layout_weight="1" />
-
-            <TextView
+                android:id="@+id/tvSet2Weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="130 lb"
@@ -102,6 +101,7 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/tvSet2Reps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10 reps"
@@ -128,13 +128,7 @@
             android:background="#2A3B4C">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set 3"
-                android:textColor="#FFFFFF"
-                android:layout_weight="1" />
-
-            <TextView
+                android:id="@+id/tvSet3Weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="130 lb"
@@ -142,6 +136,7 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/tvSet3Reps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="8 reps"
@@ -169,4 +164,3 @@
             android:padding="16dp" />
     </LinearLayout>
 </ScrollView>
-

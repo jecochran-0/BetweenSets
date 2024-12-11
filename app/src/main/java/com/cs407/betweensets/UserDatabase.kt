@@ -170,6 +170,7 @@ interface WorkoutDao {
     suspend fun getNotesByWorkout(exerciseIds: List<Int>): List<Note>
 }
 
+
 // Delete DAO
 @Dao
 interface DeleteDao {
