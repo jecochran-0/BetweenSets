@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat
 class NewWorkout : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_new_workout)
 
         val backButton: ImageButton = findViewById<ImageButton>(R.id.backButton)
