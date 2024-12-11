@@ -27,7 +27,7 @@ class ExerciseAdapter : ListAdapter<NoteSummary, ExerciseAdapter.ExerciseViewHol
 
             // Change the background color based on selection
             holder.itemView.setBackgroundColor(
-                if (selectedExercises.contains(noteSummary)) Color.LTGRAY else Color.WHITE
+                if (selectedExercises.contains(noteSummary)) Color.GRAY else Color.WHITE
             )
 
             holder.itemView.setOnClickListener {

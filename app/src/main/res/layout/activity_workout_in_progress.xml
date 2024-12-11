@@ -2,10 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1E2A38"
     android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -167,6 +169,8 @@
             android:background="#7FFF00"
             android:textColor="#000000"
             android:padding="16dp" />
+
     </LinearLayout>
+
 </ScrollView>
 
