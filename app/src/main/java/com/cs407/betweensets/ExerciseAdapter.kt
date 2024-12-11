@@ -1,5 +1,6 @@
 package com.cs407.betweensets
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import java.util.*
 
 class ExerciseAdapter : ListAdapter<NoteSummary, ExerciseAdapter.ExerciseViewHolder>(NOTE_COMPARATOR) {
 
+    private val selectedExercises = mutableSetOf<NoteSummary>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_exercise, parent, false)
         return ExerciseViewHolder(itemView)
@@ -21,7 +24,30 @@ class ExerciseAdapter : ListAdapter<NoteSummary, ExerciseAdapter.ExerciseViewHol
         val noteSummary = getItem(position)
         if (noteSummary != null) {
             holder.bind(noteSummary)
+
+            // Change the background color based on selection
+            holder.itemView.setBackgroundColor(
+                if (selectedExercises.contains(noteSummary)) Color.LTGRAY else Color.WHITE
+            )
+
+            holder.itemView.setOnClickListener {
+                if (selectedExercises.contains(noteSummary)) {
+                    selectedExercises.remove(noteSummary)
+                } else {
+                    selectedExercises.add(noteSummary)
+                }
+                // Refresh the view to show the updated selection state
+                notifyItemChanged(position)
+            }
         }
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount()
+    }
+
+    fun getSelectedExercises(): List<NoteSummary> {
+        return selectedExercises.toList()
     }
 
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

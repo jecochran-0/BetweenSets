@@ -1,6 +1,7 @@
 package com.cs407.betweensets
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.paging.PagingSource
 import androidx.room.ColumnInfo
 import androidx.room.Dao
@@ -21,7 +22,9 @@ import androidx.room.Update
 import androidx.room.Upsert
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.versionedparcelable.VersionedParcelize
 import com.cs407.betweensets.R
+import kotlinx.parcelize.Parcelize
 import java.util.Date
 
 // Define your own @Entity, @Dao and @Database
@@ -77,13 +80,14 @@ data class UserNoteRelation(
     val noteId: Int
 )
 
+@Parcelize
 data class NoteSummary(
     val noteId: Int,
     val noteTitle: String,
     val noteSets: Int,
     val noteReps: Int,
     val lastEdited: Date
-)
+) :Parcelable
 
 @Dao
 interface UserDao {
